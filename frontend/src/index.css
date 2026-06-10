@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #f3f5f2;
+  --text-color: #2c3628;
+  --primary-color: #4a7c59;
+  --primary-hover: #3d6649;
+  --accent-color: #d8a45e;
+  --danger-color: #e07a5f;
+  --success-color: #81b29a;
+  
+  --block-work: #a8dadc;
+  --block-study: #f4a261;
+  --block-rest: #bde0fe;
+  --block-family: #ffcdb2;
+
+  --font-main: 'Inter', system-ui, sans-serif;
+  
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  background-image: radial-gradient(#d1d8c9 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+button {
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+button.primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+}
+button.primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+}
+
+.layout-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  height: 1200px;
+}
+
+.time-column {
+  display: flex;
+  flex-direction: column;
+  color: #888;
+  font-size: 0.9rem;
+  text-align: right;
+  padding-right: 15px;
+}
+
+.time-slot {
+  height: 50px;
+  border-bottom: 1px solid transparent;
+}
+
+.day-column {
+  position: relative;
+  border-left: 1px dashed rgba(0,0,0,0.1);
+}
+
+.day-grid-lines {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background-size: 100% 50px;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+}
+
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.block-card {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: box-shadow 0.2s;
+  cursor: grab;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.block-card:active {
+  cursor: grabbing;
+  z-index: 50;
+}
+.block-card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.block-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.block-time {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.block-type-work { background-color: var(--block-work); border-left: 4px solid #457b9d; }
+.block-type-study { background-color: var(--block-study); border-left: 4px solid #e76f51; }
+.block-type-rest { background-color: var(--block-rest); border-left: 4px solid #a2d2ff; }
+.block-type-family { background-color: var(--block-family); border-left: 4px solid #f4a261; }
+.block-type-garden { background-color: #d4e09b; border-left: 4px solid #9fb837; } /* Modo Jardin Sync */
+
+.block-completed {
+  opacity: 0.7;
+  filter: grayscale(0.5);
+}
+
+.harvest-animation {
+  animation: popHarvest 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popHarvest {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); filter: brightness(1.2); }
+  100% { transform: scale(1); }
+}
+
+.withered {
+  filter: grayscale(1) sepia(0.5) hue-rotate(-50deg);
+  opacity: 0.6;
+}
