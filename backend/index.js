@@ -17,12 +17,12 @@ app.get('/api/blocks', (req, res) => {
 });
 
 app.post('/api/blocks', (req, res) => {
-    const { title, type, startTime, endTime, isRecurring, recurrenceRule, checklist, date, workspace, flowerId } = req.body;
+    const { title, type, startHour, duration, day, isRecurring, recurrenceRule, checklist, date, workspace, flowerId } = req.body;
     const chkStr = checklist ? JSON.stringify(checklist) : null;
     db.run(
-        `INSERT INTO blocks (title, type, startTime, endTime, isRecurring, recurrenceRule, checklist, date, workspace, flowerId) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [title, type, startTime, endTime, isRecurring ? 1 : 0, recurrenceRule, chkStr, date, workspace, flowerId],
+        `INSERT INTO blocks (title, type, startHour, duration, day, isRecurring, recurrenceRule, checklist, date, workspace, flowerId) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, type, startHour, duration, day, isRecurring ? 1 : 0, recurrenceRule, chkStr, date, workspace, flowerId],
         function (err) {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ id: this.lastID });
@@ -39,11 +39,11 @@ app.put('/api/blocks/:id/complete', (req, res) => {
 });
 
 app.put('/api/blocks/:id', (req, res) => {
-    const { title, type, startTime, endTime, checklist, date, workspace } = req.body;
+    const { title, type, startHour, duration, day, checklist, date, workspace } = req.body;
     const chkStr = checklist ? JSON.stringify(checklist) : null;
     db.run(
-        `UPDATE blocks SET title=?, type=?, startTime=?, endTime=?, checklist=?, date=?, workspace=? WHERE id=?`,
-        [title, type, startTime, endTime, chkStr, date, workspace, req.params.id],
+        `UPDATE blocks SET title=?, type=?, startHour=?, duration=?, day=?, checklist=?, date=?, workspace=? WHERE id=?`,
+        [title, type, startHour, duration, day, chkStr, date, workspace, req.params.id],
         function(err) {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ success: true });
@@ -74,30 +74,6 @@ app.post('/api/flowers', (req, res) => {
     });
 });
 
-// === Objectives API ===
-app.get('/api/objectives', (req, res) => {
-    db.all("SELECT * FROM objectives", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
-});
-
-app.post('/api/objectives', (req, res) => {
-    const { flowerId, title } = req.body;
-    db.run(`INSERT INTO objectives (flowerId, title) VALUES (?, ?)`, [flowerId, title], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ id: this.lastID });
-    });
-});
-
-app.put('/api/objectives/:id/complete', (req, res) => {
-    const { completed } = req.body;
-    db.run(`UPDATE objectives SET completed = ? WHERE id = ?`, [completed ? 1 : 0, req.params.id], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true });
-    });
-});
-
 app.listen(port, () => {
-    console.log(\`Backend running on http://localhost:\${port}\`);
+    console.log("Backend running on http://localhost:" + port);
 });

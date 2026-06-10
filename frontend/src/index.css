@@ -21,9 +21,7 @@
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -43,159 +41,85 @@ body {
   border-radius: 16px;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 4px;
-}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
 button {
-  font-family: var(--font-main);
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  font-family: var(--font-main); cursor: pointer; border: none; border-radius: 8px; transition: all 0.2s ease;
 }
 
 button.primary {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 10px 20px;
-  font-weight: 600;
+  background-color: var(--primary-color); color: white; padding: 10px 20px; font-weight: 600;
 }
 button.primary:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+  background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
 }
 
-.layout-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
+.layout-container { display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 250px; padding: 20px; display: flex; flex-direction: column; gap: 15px; border-right: 1px solid rgba(0,0,0,0.05); }
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
 
-.sidebar {
-  width: 250px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  border-right: 1px solid rgba(0,0,0,0.05);
-}
-
-.main-content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: 80px repeat(7, 1fr);
-  gap: 10px;
-  margin-top: 20px;
-  height: 1200px;
-}
-
-.time-column {
-  display: flex;
-  flex-direction: column;
-  color: #888;
-  font-size: 0.9rem;
-  text-align: right;
-  padding-right: 15px;
-}
-
-.time-slot {
-  height: 50px;
-  border-bottom: 1px solid transparent;
-}
-
-.day-column {
-  position: relative;
-  border-left: 1px dashed rgba(0,0,0,0.1);
-}
-
-.day-grid-lines {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  background-size: 100% 50px;
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-}
-
-.day-header {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding: 10px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
+/* Calendar */
+.calendar-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; margin-top: 20px; height: 1200px; }
+.time-column { display: flex; flex-direction: column; color: #888; font-size: 0.9rem; text-align: right; padding-right: 15px; }
+.time-slot { height: 50px; border-bottom: 1px solid transparent; }
+.day-column { position: relative; border-left: 1px dashed rgba(0,0,0,0.1); }
+.day-grid-lines { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; background-size: 100% 50px; background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); }
+.day-header { text-align: center; font-weight: bold; margin-bottom: 10px; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 
 .block-card {
-  position: absolute;
-  left: 5px;
-  right: 5px;
-  border-radius: 8px;
-  padding: 8px;
-  font-size: 0.85rem;
-  color: #1a1a1a;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: box-shadow 0.2s;
-  cursor: grab;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  position: absolute; left: 5px; right: 5px; border-radius: 8px; padding: 8px; font-size: 0.85rem; color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: box-shadow 0.2s; cursor: grab; overflow: hidden; display: flex; flex-direction: column;
 }
-.block-card:active {
-  cursor: grabbing;
-  z-index: 50;
-}
-.block-card:hover {
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  z-index: 10;
-}
-
-.block-title {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.block-time {
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
+.block-card:active { cursor: grabbing; z-index: 50; }
+.block-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 10; }
+.block-title { font-weight: 600; margin-bottom: 4px; }
+.block-time { font-size: 0.75rem; opacity: 0.8; }
 .block-type-work { background-color: var(--block-work); border-left: 4px solid #457b9d; }
 .block-type-study { background-color: var(--block-study); border-left: 4px solid #e76f51; }
 .block-type-rest { background-color: var(--block-rest); border-left: 4px solid #a2d2ff; }
 .block-type-family { background-color: var(--block-family); border-left: 4px solid #f4a261; }
-.block-type-garden { background-color: #d4e09b; border-left: 4px solid #9fb837; } /* Modo Jardin Sync */
+.block-completed { opacity: 0.7; filter: grayscale(0.5); }
+.withered { filter: grayscale(1) sepia(0.5) hue-rotate(-50deg); opacity: 0.6; }
 
-.block-completed {
-  opacity: 0.7;
-  filter: grayscale(0.5);
+/* Unplanted Seeds */
+.seed-badge {
+  background-color: var(--success-color); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
 }
+.seed-badge:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(129, 178, 154, 0.3); }
 
-.harvest-animation {
-  animation: popHarvest 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* Garden Mode */
+.garden-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+.flower-pot {
+  padding: 25px; text-align: center; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s; background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6)); border-radius: 16px;
 }
+.flower-pot:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 15px 30px rgba(74, 124, 89, 0.15); }
+.flower-icon { font-size: 4rem; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+.flower-title { color: var(--text-color); font-weight: 600; margin-bottom: 15px; }
+.progress-container { background: rgba(74, 124, 89, 0.1); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+.progress-bar { background: linear-gradient(90deg, var(--success-color), var(--primary-color)); height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+.flower-status { font-size: 0.85rem; color: #777; margin: 0; }
 
-@keyframes popHarvest {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); filter: brightness(1.2); }
-  100% { transform: scale(1); }
+/* Garden Modal */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 1000;
 }
-
-.withered {
-  filter: grayscale(1) sepia(0.5) hue-rotate(-50deg);
-  opacity: 0.6;
+.modal-content {
+  background: white; width: 90%; max-width: 800px; padding: 40px; border-radius: 24px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto;
 }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.close-btn { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.05); color: var(--text-color); width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
+.close-btn:hover { background: rgba(0,0,0,0.1); transform: rotate(90deg); }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+@media(max-width: 768px) { .modal-grid { grid-template-columns: 1fr; } }
+.objective-list { list-style: none; padding: 0; margin: 0; }
+.objective-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.objective-list li.done { opacity: 0.6; text-decoration: line-through; }
+.checkbox { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--primary-color); display: flex; justify-content: center; align-items: center; font-size: 12px; color: var(--primary-color); }
+.objective-list li.done .checkbox { background: var(--primary-color); color: white; }
+.history-list { display: flex; flex-direction: column; gap: 15px; max-height: 300px; overflow-y: auto; padding-right: 10px; }
+.history-item { background: rgba(0,0,0,0.02); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent-color); }
+.history-date { font-size: 0.8rem; color: #888; display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+.history-action { font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+.undo-btn { background: transparent; color: var(--danger-color); padding: 5px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+.undo-btn:hover { background: rgba(224, 122, 95, 0.1); transform: scale(1.1); }

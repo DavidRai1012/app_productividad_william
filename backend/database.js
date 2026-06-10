@@ -10,8 +10,9 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         type TEXT NOT NULL, 
-        startTime TEXT,
-        endTime TEXT,
+        startHour INTEGER,
+        duration INTEGER DEFAULT 1,
+        day INTEGER,
         isRecurring BOOLEAN,
         recurrenceRule TEXT,
         checklist TEXT,
@@ -25,7 +26,8 @@ db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS flowers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
-        status TEXT DEFAULT 'growing',
+        status TEXT DEFAULT 'Brotando',
+        progress INTEGER DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
@@ -35,6 +37,15 @@ db.serialize(() => {
         flowerId INTEGER,
         title TEXT NOT NULL,
         completed BOOLEAN DEFAULT 0,
+        FOREIGN KEY(flowerId) REFERENCES flowers(id)
+    )`);
+
+    // History table (Modo Jardin)
+    db.run(`CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        flowerId INTEGER,
+        action TEXT NOT NULL,
+        date TEXT NOT NULL,
         FOREIGN KEY(flowerId) REFERENCES flowers(id)
     )`);
 });
