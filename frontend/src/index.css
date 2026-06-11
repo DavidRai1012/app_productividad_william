@@ -61,12 +61,13 @@ button.primary:hover {
 .main-content { flex: 1; padding: 30px; overflow-y: auto; }
 
 /* Calendar */
-.calendar-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; margin-top: 20px; height: 1200px; }
+.calendar-header-row { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; margin-bottom: 10px; }
+.calendar-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; height: 1200px; position: relative; }
 .time-column { display: flex; flex-direction: column; color: #888; font-size: 0.9rem; text-align: right; padding-right: 15px; }
 .time-slot { height: 50px; border-bottom: 1px solid transparent; }
 .day-column { position: relative; border-left: 1px dashed rgba(0,0,0,0.1); }
 .day-grid-lines { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; background-size: 100% 50px; background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); }
-.day-header { text-align: center; font-weight: bold; margin-bottom: 10px; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.day-header { text-align: center; font-weight: bold; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 
 .block-card {
   position: absolute; left: 5px; right: 5px; border-radius: 8px; padding: 8px; font-size: 0.85rem; color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: box-shadow 0.2s; cursor: grab; overflow: hidden; display: flex; flex-direction: column;
@@ -123,3 +124,37 @@ button.primary:hover {
 .history-action { font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
 .undo-btn { background: transparent; color: var(--danger-color); padding: 5px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
 .undo-btn:hover { background: rgba(224, 122, 95, 0.1); transform: scale(1.1); }
+
+/* Nuevas clases para los formularios y calendarios */
+.input-field {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.8);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  margin-top: 5px;
+  transition: border-color 0.2s;
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+}
+.day-number {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-top: 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.today-circle {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+}

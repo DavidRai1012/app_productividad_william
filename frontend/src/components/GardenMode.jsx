@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Undo2 } from 'lucide-react';
+import { getFlowerImage } from '../flowerImages';
 
 const API_URL = 'http://localhost:3001/api';
 
@@ -7,7 +8,7 @@ export default function GardenMode() {
   const [selectedFlower, setSelectedFlower] = useState(null);
   const [flowers, setFlowers] = useState([]);
 
-  useEffect(() => {
+  const loadFlowers = () => {
     fetch(`${API_URL}/flowers`)
       .then(res => res.json())
       .then(data => {
@@ -19,10 +20,15 @@ export default function GardenMode() {
         setFlowers(mappedData);
       })
       .catch(err => console.error("Error loading flowers:", err));
+  };
+
+  useEffect(() => {
+    loadFlowers();
   }, []);
 
   const handleAddFlower = () => {
-    const title = 'Nueva Meta ' + (flowers.length + 1);
+    const title = prompt("¿Cómo se llama tu nueva meta?");
+    if (!title) return;
     fetch(`${API_URL}/flowers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,6 +47,10 @@ export default function GardenMode() {
     });
   };
 
+  const openFlower = (flower) => {
+    setSelectedFlower(flower);
+  };
+
   return (
     <div style={{ position: 'relative', height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
@@ -54,14 +64,20 @@ export default function GardenMode() {
       </div>
 
       <div className="garden-grid">
-        {flowers.length === 0 && <p style={{color: '#888'}}>Tu jardín está vacío. ¡Planta una semilla para comenzar!</p>}
+        {flowers.length === 0 && <p style={{color: '#888'}}>Tu jardín está vacío. Planta una semilla para comenzar.</p>}
         {flowers.map(flower => (
           <div 
             key={flower.id} 
             className="flower-pot glass" 
-            onClick={() => setSelectedFlower(flower)}
+            onClick={() => openFlower(flower)}
           >
-            <div className="flower-icon">🌻</div>
+            <div className="flower-icon">
+              <img 
+                src={getFlowerImage(flower.id)} 
+                alt={flower.title}
+                style={{width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--primary-color)'}}
+              />
+            </div>
             <h3 className="flower-title">{flower.title}</h3>
             <div className="progress-container">
               <div className="progress-bar" style={{ width: `${flower.progress || 0}%` }}></div>
@@ -76,7 +92,11 @@ export default function GardenMode() {
           <div className="modal-content glass" onClick={e => e.stopPropagation()}>
             <button className="close-btn" onClick={() => setSelectedFlower(null)}><X /></button>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-              <div style={{ fontSize: '3rem' }}>🌻</div>
+              <img 
+                src={getFlowerImage(selectedFlower.id)} 
+                alt={selectedFlower.title}
+                style={{width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--primary-color)'}}
+              />
               <div>
                 <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>{selectedFlower.title}</h2>
                 <p style={{ margin: 0, color: '#666' }}>Estado: {selectedFlower.status}</p>
@@ -103,7 +123,47 @@ export default function GardenMode() {
                     <p style={{color: '#888', fontSize: '0.9rem'}}>Aún no hay objetivos intermedios.</p>
                   )}
                 </ul>
-                <button className="primary" style={{ width: '100%', marginTop: '15px', background: 'transparent', color: 'var(--primary-color)', border: '1px dashed var(--primary-color)' }}>
+                <button 
+                  className="primary" 
+                  style={{ width: '100%', marginTop: '15px', background: 'transparent', color: 'var(--primary-color)', border: '1px dashed var(--primary-color)' }}
+                  onClick={() => {
+                    const title = prompt("¿Cuál es el nuevo objetivo intermedio?");
+                    if (title) {
+                       const newObj = { title, done: false };
+                       const updatedFlowers = flowers.map(f => 
+                          f.id === selectedFlower.id ? { ...f, objectives: [...f.objectives, newObj] } : f
+                       );
+                       setFlowers(updatedFlowers);
+                       setSelectedFlower({ ...selectedFlower, objectives: [...selectedFlower.objectives, newObj] });
+                       
+                       if (window.confirm("¿Deseas generar un bloque recurrente en el Modo Campo para trabajar en este objetivo semanalmente?")) {
+                          const today = new Date();
+                          const datesToInsert = [];
+                          for (let i = 0; i < 4; i++) {
+                            const d = new Date(today);
+                            d.setDate(d.getDate() + (i * 7));
+                            datesToInsert.push(d.toISOString().split('T')[0]);
+                          }
+
+                          fetch(`${API_URL}/blocks`, {
+                             method: 'POST',
+                             headers: { 'Content-Type': 'application/json' },
+                             body: JSON.stringify({
+                               title: selectedFlower.title + " - " + title,
+                               type: "garden",
+                               startTime: "10:00",
+                               endTime: "11:00",
+                               isRecurring: true,
+                               recurrenceId: 'rec_' + Date.now(),
+                               dates: datesToInsert,
+                               flowerId: selectedFlower.id,
+                               checklist: []
+                             })
+                          }).then(() => alert("Bloque recurrente añadido al Modo Campo."));
+                       }
+                    }
+                  }}
+                >
                   + Añadir Objetivo
                 </button>
               </div>

@@ -5,24 +5,21 @@ const dbPath = path.resolve(__dirname, 'agro_productivity.db');
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
-    // Blocks table (Modo Campo)
     db.run(`CREATE TABLE IF NOT EXISTS blocks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         type TEXT NOT NULL, 
-        startHour INTEGER,
-        duration INTEGER DEFAULT 1,
-        day INTEGER,
+        startTime TEXT,
+        endTime TEXT,
+        date TEXT,
         isRecurring BOOLEAN,
-        recurrenceRule TEXT,
+        recurrenceId TEXT,
         checklist TEXT,
         completed BOOLEAN DEFAULT 0,
-        date TEXT,
         workspace TEXT DEFAULT 'default',
         flowerId INTEGER
     )`);
 
-    // Flowers table (Modo Jardin)
     db.run(`CREATE TABLE IF NOT EXISTS flowers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -31,7 +28,6 @@ db.serialize(() => {
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    // Objectives table (Modo Jardin)
     db.run(`CREATE TABLE IF NOT EXISTS objectives (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         flowerId INTEGER,
@@ -40,7 +36,6 @@ db.serialize(() => {
         FOREIGN KEY(flowerId) REFERENCES flowers(id)
     )`);
 
-    // History table (Modo Jardin)
     db.run(`CREATE TABLE IF NOT EXISTS history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         flowerId INTEGER,
