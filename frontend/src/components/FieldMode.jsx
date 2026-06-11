@@ -25,6 +25,7 @@ export default function FieldMode() {
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [blocks, setBlocks] = useState([]);
   const [draggedItem, setDraggedItem] = useState(null);
+  const [nextObjectives, setNextObjectives] = useState({});
   
   // Modal: dos modos - "view" (ver checklist y datos) y "edit" (editar)
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,7 +54,16 @@ export default function FieldMode() {
   const loadFlowers = () => {
     fetch(`${API_URL}/flowers`)
       .then(res => res.json())
-      .then(data => setGardenFlowers(data))
+      .then(data => {
+        setGardenFlowers(data);
+        // Cargar el próximo objetivo para cada flor
+        const objMap = {};
+        data.forEach(f => {
+          const nextObj = (f.objectives || []).find(o => !o.completed);
+          if (nextObj) objMap[f.id] = nextObj;
+        });
+        setNextObjectives(objMap);
+      })
       .catch(err => console.error(err));
   };
 
@@ -383,6 +393,8 @@ export default function FieldMode() {
                     const checklistArr = Array.isArray(b.checklist) ? b.checklist : [];
                     const doneCount = checklistArr.filter(c => c.done).length;
 
+                    const nextObj = b.flowerId ? nextObjectives[b.flowerId] : null;
+
                     return (
                       <div 
                         key={b.id} 
@@ -396,8 +408,13 @@ export default function FieldMode() {
                         <div className="block-title">{b.title}</div>
                         <div className="block-time">{b.startTime} - {b.endTime}</div>
                         {checklistArr.length > 0 && (
-                          <div style={{fontSize: '0.7rem', marginTop: '3px', opacity: 0.8}}>
+                          <div style={{fontSize: '0.7rem', marginTop: '2px', opacity: 0.8}}>
                             {doneCount}/{checklistArr.length} tareas
+                          </div>
+                        )}
+                        {nextObj && heightPx > 40 && (
+                          <div style={{fontSize: '0.65rem', marginTop: '2px', color: 'var(--primary-color)', fontWeight: '600', opacity: 0.9}}>
+                            Meta: {nextObj.title}
                           </div>
                         )}
                       </div>
@@ -437,6 +454,14 @@ export default function FieldMode() {
                      Tipo: {editingBlock.type}
                    </span>
                  </div>
+
+                 {/* Objetivo próximo para bloques de jardín */}
+                 {editingBlock.flowerId && nextObjectives[editingBlock.flowerId] && (
+                   <div style={{background: 'rgba(74,124,89,0.06)', padding: '15px', borderRadius: '12px', marginBottom: '20px', borderLeft: '4px solid var(--primary-color)'}}>
+                     <div style={{fontSize: '0.8rem', color: '#888', marginBottom: '5px'}}>Objetivo próximo de esta meta:</div>
+                     <div style={{fontWeight: '600', color: 'var(--primary-color)'}}>{nextObjectives[editingBlock.flowerId].title}</div>
+                   </div>
+                 )}
 
                  {/* Checklist interactiva */}
                  <div>

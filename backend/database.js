@@ -17,31 +17,35 @@ db.serialize(() => {
         checklist TEXT,
         completed BOOLEAN DEFAULT 0,
         workspace TEXT DEFAULT 'default',
-        flowerId INTEGER
+        flowerId INTEGER,
+        recurrentId INTEGER
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS flowers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
-        status TEXT DEFAULT 'Brotando',
-        progress INTEGER DEFAULT 0,
+        imageIndex INTEGER DEFAULT 0,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS objectives (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        flowerId INTEGER,
+        flowerId INTEGER NOT NULL,
         title TEXT NOT NULL,
         completed BOOLEAN DEFAULT 0,
-        FOREIGN KEY(flowerId) REFERENCES flowers(id)
+        orderIndex INTEGER DEFAULT 0,
+        FOREIGN KEY(flowerId) REFERENCES flowers(id) ON DELETE CASCADE
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS history (
+    db.run(`CREATE TABLE IF NOT EXISTS flower_recurrents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        flowerId INTEGER,
-        action TEXT NOT NULL,
-        date TEXT NOT NULL,
-        FOREIGN KEY(flowerId) REFERENCES flowers(id)
+        flowerId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        startTime TEXT DEFAULT '09:00',
+        endTime TEXT DEFAULT '10:00',
+        days TEXT DEFAULT '[]',
+        checklist TEXT DEFAULT '[]',
+        FOREIGN KEY(flowerId) REFERENCES flowers(id) ON DELETE CASCADE
     )`);
 });
 
